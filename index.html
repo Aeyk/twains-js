@@ -25,15 +25,16 @@
   </body>
 
   <script>
-    var mymap = L.map('mapid').setView([0, 0], 13);
+    var lat
+    var mymap = L.map('mapid').setView([51.505, 0.09], 1);
 
      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
+        maxZoom: 20,
         attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
       }).addTo(mymap);
 
     L.control.scale().addTo(mymap);
-    L.marker({lon: 0, lat: 0}).bindPopup('The center of the world').addTo(mymap);
+    L.marker({lon: 37, lat: 0.2}).bindPopup('The center of the world').addTo(mymap);
 
     </script>
 </html>

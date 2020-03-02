@@ -8,8 +8,8 @@
 	      crossorigin=""/>
 	<!-- Make sure you put this AFTER Leaflet's CSS -->
 	<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
-		integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
-		crossorigin=""></script>
+		     integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+		     crossorigin=""></script>
 
 	<style>
 	 #mapid {
@@ -25,19 +25,25 @@
     </body>
 
     <script>
+     /* https://www.arcgis.com/home/item.html?id=96ec03e4fc8546bd8a864e39a2c3fc41 */
+
+
+     var position = {lat: 37.762468,  lon: -122.419019};
+     
+     var mymap = L.map('mapid').setView([0, 0], 1);
+
+     
      var geojson_url_example = new Request('https://services3.arcgis.com/6rJKAjBRDRSfjCzV/arcgis/rest/services/BNSF_(2018)/FeatureServer/0/query?where=FID+%3E+0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=');
      var geojay =
 	 fetch(geojson_url_example)
 	     .then((response) => {
-		 console.log(response)
 		 return response.json()
 	     })
 	     .then((data) => {
-		 console.log(data);
-	     });
-     
-     
-     var mymap = L.map('mapid').setView([0, 0], 1);
+
+		 return L.geoJson(data);
+	     }).then(d => d.addTo(mymap) );
+
 
      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 	 maxZoom: 20,
@@ -45,7 +51,7 @@
      }).addTo(mymap);
 
      L.control.scale().addTo(mymap);
-     L.marker({lon: -122.419019, lat: 37.762468}).bindPopup('The center of the world').addTo(mymap);
+     L.marker(position).bindPopup('The center of the world').addTo(mymap);
 
     </script>
 </html>

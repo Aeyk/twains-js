@@ -11,14 +11,14 @@
 	      crossorigin=""/>
 	<!-- Make sure you put this AFTER Leaflet's CSS -->
 	<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
-		integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="/
-		crossorigin=""></script>
+		     integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="/
+		     crossorigin=""></script>
 
 	
 	<!-- Load Esri Leaflet from CDN -->
 	<script src="https://unpkg.com/esri-leaflet@2.3.3/dist/esri-leaflet.js"
-		     integrity="sha512-cMQ5e58BDuu1pr9BQ/eGRn6HaR6Olh0ofcHFWe5XesdCITVuSBiBZZbhCijBe5ya238f/zMMRYIMIIg1jxv4sQ=="
-		     crossorigin=""></script> 
+		integrity="sha512-cMQ5e58BDuu1pr9BQ/eGRn6HaR6Olh0ofcHFWe5XesdCITVuSBiBZZbhCijBe5ya238f/zMMRYIMIIg1jxv4sQ=="
+		crossorigin=""></script> 
 
 	<!-- Include Leaflet.heat from CDN -->
 	<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
@@ -61,6 +61,10 @@
      var bnsf_geojson = new Request('https://services3.arcgis.com/6rJKAjBRDRSfjCzV/ArcGIS/rest/services/BNSF_(2018)/FeatureServer/0/query?where=OBJECTID+%3E+0&objectIds=&time=&geometry=&geometryType=esriGeometryMultipoint&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=')
 
      var ca_inter_gj = new Request('https://services2.arcgis.com/FiaPA4ga0iQKduv3/ArcGIS/rest/services/Intermodal_Freight_Facilities/FeatureServer/0/query?where=ID+%3E+0+AND+STATE%3D%27CA%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=')
+
+     var ca_class_yard_json = new Request('https://geodata.dot.ca.gov/arcgis/rest/services/Rail/Freight_Intermodal_Facilites/MapServer/0/query?where=OBJECTID+%3E+0+OR+OBJECTID+%3C+0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=pjson')
+
+     
      //     var intermodal_geojson = new Request('North_American_Rail_Nodes.geojson');
      
      
@@ -123,21 +127,26 @@
 		 
 	     });
      
-     var bnsf_geojay =
- 	 fetch(ca_inter_gj)
- 	     .then((response) => {
+
+     var intermodal_geojay =
+ 	 fetch(ca_class_yard_json)
+ 	     .then((response) => {		
  		 return response.json()
  	     })
  	     .then((data) => {
-		 // new constructor syntax at 2.0.0
-		 L.esri.Heat.featureLayer({
-		     url: 'https://sampleserver6.arcgisonline.com/arcgis/rest/services/CommunityAddressing/MapServer/0',
-		     radius: 10
-		 }).addTo(mymap)
-
+		 data.features.forEach((feature)=> {
+		     feature.properties = {}
+		     feature.type = "Feature"
+		     feature.geometry = {type: "Point", coordinates: [
+			 feature.geometry.x,
+			 feature.geometry.y
+		     ]}
+		 })
+		 var o = 
+		     {type: 'FeatureCollection', features: data.features};
+		 L.geoJson(o).addTo(mymap);
  	     });
-     
-     
+
      
      var intermodal_geojay =
  	 fetch(ca_inter_gj)
@@ -145,20 +154,31 @@
  		 return response.json()
  	     })
  	     .then((data) => {
-		 L.esri.Heat.featureLayer({
-		     url: 'https://services2.arcgis.com/FiaPA4ga0iQKduv3/ArcGIS/rest/services/Intermodal_Freight_Facilities/FeatureServer/0/query?where=ID+%3E+0+AND+STATE%3D%27CA%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=',
-		     radius: 10
-		 }).addTo(mymap);
+
+		 
+
+		 L.geoJson(data, {
+		     style: function(feature) {
+			 return { color: 'green' }
+		     }
+		 })//.addTo(mymap);
+		 console.log(data)
  	     });
 
+     var trails = L.esri.featureLayer({
+	 url:
+     'https://geodata.dot.ca.gov/arcgis/rest/services/Rail/Freight_Intermodal_Facilites/MapServer/0'
 
+     }).addTo(mymap);
+
+		  L.esri.Heat.featureLayer({
+		      url: 'https://geodata.dot.ca.gov/arcgis/rest/services/Rail/Freight_Classification_Yards/MapServer/0',
+		      radius: 1
+		  }).addTo(mymap);
+     
      L.esri.basemapLayer('Gray').addTo(mymap);
      /* 
       *      L.control.scale().addTo(mymap); */
 
-     L.esri.Heat.featureLayer({
-	 url: 'https://sampleserver6.arcgisonline.com/arcgis/rest/services/CommunityAddressing/MapServer/0',
-	 radius: 10
-     }).addTo(map);
     </script>
 </html>

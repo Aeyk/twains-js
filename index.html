@@ -1,184 +1,292 @@
 <!doctype html>
 <html lang="en">
-    <head>
-	<meta charset="UTF-8"/>
-	<title>Document</title>
+  <head>
+    <meta charset="UTF-8"/>
+    <title>Document</title>
 
 
-	
-	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
-	      integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-	      crossorigin=""/>
-	<!-- Make sure you put this AFTER Leaflet's CSS -->
-	<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
-		     integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="/
-		     crossorigin=""></script>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+	  integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+	  crossorigin=""/>
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+	    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="/
+	    crossorigin=""></script>
 
-	
-	<!-- Load Esri Leaflet from CDN -->
-	<script src="https://unpkg.com/esri-leaflet@2.3.3/dist/esri-leaflet.js"
-		integrity="sha512-cMQ5e58BDuu1pr9BQ/eGRn6HaR6Olh0ofcHFWe5XesdCITVuSBiBZZbhCijBe5ya238f/zMMRYIMIIg1jxv4sQ=="
-		crossorigin=""></script> 
+    
+    <!-- Load Esri Leaflet from CDN -->
+    <script src="https://unpkg.com/esri-leaflet@2.3.3/dist/esri-leaflet.js"
+	    integrity="sha512-cMQ5e58BDuu1pr9BQ/eGRn6HaR6Olh0ofcHFWe5XesdCITVuSBiBZZbhCijBe5ya238f/zMMRYIMIIg1jxv4sQ=="
+	    crossorigin=""></script> 
 
-	<!-- Include Leaflet.heat from CDN -->
-	<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    <!-- Include Leaflet.heat from CDN -->
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
 
-	<!-- Load Heatmap Feature Layer from CDN -->
-	<script src="https://unpkg.com/esri-leaflet-heatmap@2.0.0"></script>
-
-
-	<script src="./leaflet-knn.min.js"></script>
+    <!-- Load Heatmap Feature Layer from CDN -->
+    <script src="https://unpkg.com/esri-leaflet-heatmap@2.0.0"></script>
 
 
-	<style>
-	 #mapid {
-	     height: 95vh;
-	 }
-	</style>
-	
-    </head>
-    <body>
-	<div id="mapid">
-
-	</div>
-    </body>
-
-    <script>
-     /* https://www.arcgis.com/home/item.html?id=96ec03e4fc8546bd8a864e39a2c3fc41 */
+    <script src="./leaflet-knn.min.js"></script>
 
 
-     var position = {lat: 37.762468,  lon: -122.419019};
-     
-     //var mymap = L.map('mapid').setView([0, 0], 1);
-     var mymap = L.map('mapid').setView([37.75, -122.23], 6);
-     
-     var geojson_url_example = new Request('https://services3.arcgis.com/6rJKAjBRDRSfjCzV/arcgis/rest/services/BNSF_(2018)/FeatureServer/0/query?where=FID+%3E+0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=');
+    <style>
+      #mapid {
+	  height: 95vh;
+      }
+    </style>
+    
+  </head>
+  <body>
+    <div id="mapid">
 
-     var gj_url_2 = new Request('https://services3.arcgis.com/6rJKAjBRDRSfjCzV/ArcGIS/rest/services/Abandoned_Rail_Lines/FeatureServer/0/query?where=FID+%3E+0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=');
+    </div>
+  </body>
 
-     var union_pacific_geojson = new Request('https://services3.arcgis.com/6rJKAjBRDRSfjCzV/ArcGIS/rest/services/Union_Pacific_(2018)/FeatureServer/0/query?where=FID+%3E+0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=');
-     
-     var bnsf_geojson = new Request('https://services3.arcgis.com/6rJKAjBRDRSfjCzV/ArcGIS/rest/services/BNSF_(2018)/FeatureServer/0/query?where=OBJECTID+%3E+0&objectIds=&time=&geometry=&geometryType=esriGeometryMultipoint&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=')
+  <script>
+    /* https://www.arcgis.com/home/item.html?id=96ec03e4fc8546bd8a864e39a2c3fc41 */
 
-     var ca_inter_gj = new Request('https://services2.arcgis.com/FiaPA4ga0iQKduv3/ArcGIS/rest/services/Intermodal_Freight_Facilities/FeatureServer/0/query?where=ID+%3E+0+AND+STATE%3D%27CA%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=')
 
-     var ca_class_yard_json = new Request('https://geodata.dot.ca.gov/arcgis/rest/services/Rail/Freight_Intermodal_Facilites/MapServer/0/query?where=OBJECTID+%3E+0+OR+OBJECTID+%3C+0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=pjson')
+    var position = {lat: 37.762468,  lon: -122.419019};
+    
+    //var mymap = L.map('mapid').setView([0, 0], 1);
+    var mymap = L.map('mapid').setView([37.75, -122.23], 6);
+    
+    var geojson_url_example = new Request('https://services3.arcgis.com/6rJKAjBRDRSfjCzV/arcgis/rest/services/BNSF_(2018)/FeatureServer/0/query?where=FID+%3E+0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=');
 
-     
-     //     var intermodal_geojson = new Request('North_American_Rail_Nodes.geojson');
-     
-     
-     /* 
-      *      var geojay =
-      * 	 fetch(geojson_url_example)
-      * 	     .then((response) => {
-      * 		 return response.json()
-      * 	     })
-      * 	     .then((data) => {
-      * 		 L.geoJson(data).addTo(mymap);
-      * 	     }); */
+    var gj_url_2 = new Request('https://services3.arcgis.com/6rJKAjBRDRSfjCzV/ArcGIS/rest/services/Abandoned_Rail_Lines/FeatureServer/0/query?where=FID+%3E+0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=');
 
-     /* 
-      *      var geojay2 =
-      * 	 fetch(gj_url_2)
-      * 	     .then((response) => {
-      * 		 return response.json()
-      * 	     })
-      * 	     .then((data) => {
-      * 		 gj = L.geoJson(data)
-      * 		 var nearest = leafletKnn(gj).nearest(position, 5);
-      * 		 gj.addTo(mymap);
-      * 		 console.log(gj)
-      * 	     });
-      * 
-      *  */
+    var union_pacific_geojson = new Request('https://services3.arcgis.com/6rJKAjBRDRSfjCzV/ArcGIS/rest/services/Union_Pacific_(2018)/FeatureServer/0/query?where=FID+%3E+0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=');
+    
+    var bnsf_geojson = new Request('https://services3.arcgis.com/6rJKAjBRDRSfjCzV/ArcGIS/rest/services/BNSF_(2018)/FeatureServer/0/query?where=OBJECTID+%3E+0&objectIds=&time=&geometry=&geometryType=esriGeometryMultipoint&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=')
 
-     
-     
-     var up_geojson =
- 	 fetch(union_pacific_geojson)
- 	     .then((response) => {
- 		 return response.json()
- 	     })
- 	     .then((data) => {
- 		 L.geoJson(data,
-			   {
-			       style: function(feature) {
-				   rand = Math.floor(Math.random(1))
-				   return { color: 'red' }
-			       }
-		 })
- 		  .addTo(mymap);
- 	     });
-     
-     var bnsf_geojay =
- 	 fetch(bnsf_geojson)
- 	     .then((response) => {
- 		 return response.json()
- 	     })
- 	     .then((data) => {
- 		 L.geoJson(data,
-			   {
-			       style: function(feature) {
-				   rand = Math.floor(Math.random(1))
-				   return { color: 'green' }
-			       }
-		 }).addTo(mymap);
-		 
-	     });
-     
+    var ca_inter_gj = new Request('https://services2.arcgis.com/FiaPA4ga0iQKduv3/ArcGIS/rest/services/Intermodal_Freight_Facilities/FeatureServer/0/query?where=ID+%3E+0+AND+STATE%3D%27CA%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=')
 
-     var intermodal_geojay =
- 	 fetch(ca_class_yard_json)
- 	     .then((response) => {		
- 		 return response.json()
- 	     })
- 	     .then((data) => {
-		 data.features.forEach((feature)=> {
-		     feature.properties = {}
-		     feature.type = "Feature"
-		     feature.geometry = {type: "Point", coordinates: [
-			 feature.geometry.x,
-			 feature.geometry.y
-		     ]}
-		 })
-		 var o = 
-		     {type: 'FeatureCollection', features: data.features};
-		 L.geoJson(o).addTo(mymap);
- 	     });
+    var ca_class_yard_json = new Request('https://geodata.dot.ca.gov/arcgis/rest/services/Rail/Freight_Intermodal_Facilites/MapServer/0/query?where=OBJECTID+%3E+0+OR+OBJECTID+%3C+0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=pjson')
 
-     
-     var intermodal_geojay =
- 	 fetch(ca_inter_gj)
- 	     .then((response) => {
- 		 return response.json()
- 	     })
- 	     .then((data) => {
 
-		 
 
-		 L.geoJson(data, {
-		     style: function(feature) {
-			 return { color: 'green' }
-		     }
-		 })//.addTo(mymap);
-		 console.log(data)
- 	     });
+    var csx_geojson = new Request('https://services3.arcgis.com/6rJKAjBRDRSfjCzV/arcgis/rest/services/CSX_Transportation_(2018)/FeatureServer/0/query?where=OBJECTID+%3E+0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=')
 
-     var trails = L.esri.featureLayer({
-	 url:
-     'https://geodata.dot.ca.gov/arcgis/rest/services/Rail/Freight_Intermodal_Facilites/MapServer/0'
+    
+    var cpac_geojson = new Request('https://services3.arcgis.com/6rJKAjBRDRSfjCzV/arcgis/rest/services/Canadian_Pacific_(2018)/FeatureServer/0/query?where=OBJECTID+%3E+0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=')
+    
+    var cnat_geojson = new Request('https://services3.arcgis.com/6rJKAjBRDRSfjCzV/arcgis/rest/services/Canadian_National_(2018)/FeatureServer/0/query?where=OBJECTID+%3E+0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=')
+    
+    var kcs_geojson = new Request('https://services3.arcgis.com/6rJKAjBRDRSfjCzV/ArcGIS/rest/services/Kansas_City_Southern_(2018)/FeatureServer/0/query?where=OBJECTID+%3E+0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=')
 
-     }).addTo(mymap);
+    var other_geojson = new Request('https://services3.arcgis.com/6rJKAjBRDRSfjCzV/arcgis/rest/services/Amtrak_(2018)/FeatureServer/0/query?where=OBJECTID+%3E+0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=')
+    var amtrak_geojson = new Request('')
+    //     var intermodal_geojson = new Request('North_American_Rail_Nodes.geojson');
+    
+    
+    /* 
+     *      var geojay =
+     * 	 fetch(geojson_url_example)
+     * 	     .then((response) => {
+     * 		 return response.json()
+     * 	     })
+     * 	     .then((data) => {
+     * 		 L.geoJson(data).addTo(mymap);
+     * 	     }); */
 
-		  L.esri.Heat.featureLayer({
-		      url: 'https://geodata.dot.ca.gov/arcgis/rest/services/Rail/Freight_Classification_Yards/MapServer/0',
-		      radius: 1
-		  }).addTo(mymap);
-     
-     L.esri.basemapLayer('Gray').addTo(mymap);
-     /* 
-      *      L.control.scale().addTo(mymap); */
+    /* 
+     *      var geojay2 =
+     * 	 fetch(gj_url_2)
+     * 	     .then((response) => {
+     * 		 return response.json()
+     * 	     })
+     * 	     .then((data) => {
+     * 		 gj = L.geoJson(data)
+     * 		 var nearest = leafletKnn(gj).nearest(position, 5);
+     * 		 gj.addTo(mymap);
+     * 		 console.log(gj)
+     * 	     });
+     * 
+     *  */
 
-    </script>
+    var legend = L.control({ position: "bottomleft" });
+
+    legend.onAdd = function(map) {
+	var div = L.DomUtil.create("div", "legend");
+	div.innerHTML += "<h4>Tegnforklaring</h4>";
+	div.innerHTML += '<i style="background-color: #bf8a33">__</i><span>Union Pacific</span><br>';
+	div.innerHTML += '<i style="background: #448D40">__</i><span>BNSF</span><br>';
+	div.innerHTML += '<i style="background: #E6E696">__</i><span>CSX</span><br>';
+	div.innerHTML += '<i style="background: #E8E6E0">__</i><span>Norfolk Southern</span><br>';
+	div.innerHTML += '<i style="background: #ed1d24">__</i><span>Canadian Pacific (US data only)</span><br>';
+	div.innerHTML += '<i style="background: blue">__</i><span>Canadian National (US data only)</span><br>';
+	div.innerHTML += '<i style="background: violet">__</i><span>Kansas Southern</span><br>';
+	return div;
+    };
+
+
+    
+    var up_geojson =
+ 	fetch(union_pacific_geojson)
+ 	.then((response) => {
+ 	    return response.json()
+ 	})
+ 	.then((data) => {
+ 	    L.geoJson(data,
+		      {
+			  style: function(feature) {
+			      return { color: '#bf8a33' }
+			  }
+		      })
+ 		.addTo(mymap);
+ 	});
+    
+    var bnsf_geojay =
+ 	fetch(bnsf_geojson)
+ 	.then((response) => {
+ 	    return response.json()
+ 	})
+ 	.then((data) => {
+ 	    L.geoJson(data,
+		      {
+			  style: function(feature) {
+			      return { color: '#448D40' }
+			  }
+		      }).addTo(mymap);
+	    
+	});
+
+        
+    var csx_geojay =
+ 	fetch(csx_geojson)
+ 	.then((response) => {
+ 	    return response.json()
+ 	})
+ 	.then((data) => {
+ 	    L.geoJson(data,
+		      {
+			  style: function(feature) {
+			      return { color: '#E6E696' }
+			  }
+		      }).addTo(mymap);
+	    
+	});
+    
+
+        
+    var cpac_geojay =
+ 	fetch(cpac_geojson)
+ 	.then((response) => {
+ 	    return response.json()
+ 	})
+ 	.then((data) => {
+ 	    L.geoJson(data,
+		      {
+			  style: function(feature) {
+			      return { color: '#ed1d24' }
+			  }
+		      }).addTo(mymap);
+	    
+	});
+    
+    var cnat_geojay =
+ 	fetch(cnat_geojson)
+ 	.then((response) => {
+ 	    return response.json()
+ 	})
+ 	.then((data) => {
+ 	    L.geoJson(data,
+		      {
+			  style: function(feature) {
+			      return { color: 'red'}
+			  }
+		      }).addTo(mymap);
+	    
+	});
+    
+    
+    var kcs_geojay =
+ 	fetch(kcs_geojson)
+ 	.then((response) => {
+ 	    return response.json()
+ 	})
+ 	.then((data) => {
+ 	    L.geoJson(data,
+		      {
+			  style: function(feature) {
+			      return { color: 'violet' }
+			  }
+		      }).addTo(mymap);
+	    
+	});
+    
+    var other_geojay =
+ 	fetch(other_geojson)
+ 	.then((response) => {
+ 	    return response.json()
+ 	})
+ 	.then((data) => {
+ 	    L.geoJson(data,
+		      {
+			  style: function(feature) {
+			      return { color: 'violet' }
+			  }
+		      }).addTo(mymap);
+	    
+	});
+    
+
+    
+    var intermodal_geojay =
+ 	fetch(ca_class_yard_json)
+ 	.then((response) => {		
+ 	    return response.json()
+ 	})
+ 	.then((data) => {
+	    data.features.forEach((feature)=> {
+		feature.properties = {}
+		feature.type = "Feature"
+		feature.geometry = {type: "Point", coordinates: [
+		    feature.geometry.x,
+		    feature.geometry.y
+		]}
+	    })
+	    var o = 
+		{type: 'FeatureCollection', features: data.features};
+	    L.geoJson(o).addTo(mymap);
+ 	});
+
+    
+    var intermodal_geojay =
+ 	fetch(ca_inter_gj)
+ 	.then((response) => {
+ 	    return response.json()
+ 	})
+ 	.then((data) => {
+
+	    
+
+	    L.geoJson(data, {
+		style: function(feature) {
+		    return { color: 'green' }
+		}
+	    })//.addTo(mymap);
+	    console.log(data)
+ 	});
+
+    var trails = L.esri.featureLayer({
+	url:
+	'https://geodata.dot.ca.gov/arcgis/rest/services/Rail/Freight_Intermodal_Facilites/MapServer/0'
+
+    }).addTo(mymap);
+
+
+    L.esri.Heat.featureLayer({
+	url: 'https://geodata.dot.ca.gov/arcgis/rest/services/Rail/Freight_Classification_Yards/MapServer/0',
+	radius: 1
+    }).addTo(mymap);
+    
+    L.esri.basemapLayer('Gray').addTo(mymap);
+    /* 
+     *      L.control.scale().addTo(mymap); */    
+
+legend.addTo(mymap);
+
+     </script>
 </html>

@@ -6,7 +6,7 @@ var app = express()
 
 
 app.get('/', function (req, res) {
-    res.send('');
+    res.sendFile(__dirname + '/index.html')
 })
 
 app.get('/:name(bnsf|cn|cp|csx|kcs|up|other)?', function (req, res) {

@@ -1,0 +1,31 @@
+Arguments: 
+  /usr/bin/node /usr/share/yarn/bin/yarn.js install express
+
+PATH: 
+  /home/malik/.anaconda3/bin:/home/malik/.anaconda3/condabin:/home/malik/.rbenv/plugins/ruby-build/bin:/home/malik/.rbenv/shims:/home/malik/.rbenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+
+Yarn version: 
+  1.22.0
+
+Node version: 
+  12.16.1
+
+Platform: 
+  linux x64
+
+Trace: 
+  SyntaxError: /home/malik/Workspace/twains-js/package.json: Unexpected end of JSON input
+      at JSON.parse (<anonymous>)
+      at /usr/share/yarn/lib/cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (/usr/share/yarn/lib/cli.js:310:30)
+      at /usr/share/yarn/lib/cli.js:321:13
+
+npm manifest: 
+  
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

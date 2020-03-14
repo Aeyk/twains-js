@@ -4,6 +4,7 @@
     <meta charset="UTF-8"/>
     <title>Twains uWu</title>
 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
@@ -193,21 +194,9 @@
     
 
    
-    var trails = L.esri.featureLayer({
-	url:
-	'https://geodata.dot.ca.gov/arcgis/rest/services/Rail/Freight_Intermodal_Facilites/MapServer/0'
-
-    }).addTo(mymap);
-
-
-    L.esri.Heat.featureLayer({
-	url: 'https://geodata.dot.ca.gov/arcgis/rest/services/Rail/Freight_Classification_Yards/MapServer/0',
-	radius: 1
-    }).addTo(mymap);
+        L.esri.basemapLayer('Gray').addTo(mymap);
     
-    L.esri.basemapLayer('Gray').addTo(mymap);
-    /* 
-     *      L.control.scale().addTo(mymap); */    
+          L.control.scale().addTo(mymap); 
 
 legend.addTo(mymap);
 

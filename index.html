@@ -27,9 +27,6 @@
     <script src="https://unpkg.com/esri-leaflet-heatmap@2.0.0"></script>
 
 
-    <script src="./leaflet-knn.min.js"></script>
-
-
     <style>
       #mapid {
 	  height: 95vh;
@@ -56,9 +53,9 @@
     
     var bnsf_geojson = new Request('http://localhost:8000/bnsf')
 
-    var ca_inter_gj = new Request('https://services2.arcgis.com/FiaPA4ga0iQKduv3/ArcGIS/rest/services/Intermodal_Freight_Facilities/FeatureServer/0/query?where=ID+%3E+0+AND+STATE%3D%27CA%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=')
+    // var ca_inter_gj = new Request('https://services2.arcgis.com/FiaPA4ga0iQKduv3/ArcGIS/rest/services/Intermodal_Freight_Facilities/FeatureServer/0/query?where=ID+%3E+0+AND+STATE%3D%27CA%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=')
 
-    var ca_class_yard_json = new Request('https://geodata.dot.ca.gov/arcgis/rest/services/Rail/Freight_Intermodal_Facilites/MapServer/0/query?where=OBJECTID+%3E+0+OR+OBJECTID+%3C+0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=pjson')
+    // var ca_class_yard_json = new Request('https://geodata.dot.ca.gov/arcgis/rest/services/Rail/Freight_Intermodal_Facilites/MapServer/0/query?where=OBJECTID+%3E+0+OR+OBJECTID+%3C+0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=pjson')
 
     var csx_geojson = new Request('http://localhost:8000/csx')
     
@@ -200,42 +197,42 @@
     
 
     
-    var intermodal_geojay =
- 	fetch(ca_class_yard_json)
- 	.then((response) => {		
- 	    return response.json()
- 	})
- 	.then((data) => {
-	    data.features.forEach((feature)=> {
-		feature.properties = {}
-		feature.type = "Feature"
-		feature.geometry = {type: "Point", coordinates: [
-		    feature.geometry.x,
-		    feature.geometry.y
-		]}
-	    })
-	    var o = 
-		{type: 'FeatureCollection', features: data.features};
-	    L.geoJson(o).addTo(mymap);
- 	});
+    // var intermodal_geojay =
+    // 	fetch(ca_class_yard_json)
+    // 	.then((response) => {		
+    // 	    return response.json()
+    // 	})
+    // 	.then((data) => {
+    // 	    data.features.forEach((feature)=> {
+    // 		feature.properties = {}
+    // 		feature.type = "Feature"
+    // 		feature.geometry = {type: "Point", coordinates: [
+    // 		    feature.geometry.x,
+    // 		    feature.geometry.y
+    // 		]}
+    // 	    })
+    // 	    var o = 
+    // 		{type: 'FeatureCollection', features: data.features};
+    // 	    L.geoJson(o).addTo(mymap);
+    // 	});
 
     
-    var intermodal_geojay =
- 	fetch(ca_inter_gj)
- 	.then((response) => {
- 	    return response.json()
- 	})
- 	.then((data) => {
+    // var intermodal_geojay =
+    // 	fetch(ca_inter_gj)
+    // 	.then((response) => {
+    // 	    return response.json()
+    // 	})
+    // 	.then((data) => {
 
 	    
 
-	    L.geoJson(data, {
-		style: function(feature) {
-		    return { color: 'green' }
-		}
-	    })//.addTo(mymap);
-	    console.log(data)
- 	});
+    // 	    L.geoJson(data, {
+    // 		style: function(feature) {
+    // 		    return { color: 'green' }
+    // 		}
+    // 	    })//.addTo(mymap);
+    // 	    console.log(data)
+    // 	});
 
     var trails = L.esri.featureLayer({
 	url:

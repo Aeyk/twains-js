@@ -4,7 +4,7 @@
     <meta charset="UTF-8"/>
     <title>Twains uWu</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
@@ -81,7 +81,7 @@
     };
 
 
-            
+    
     var csx_geojay =
  	fetch(csx_geojson)
  	.then((response) => {
@@ -130,7 +130,7 @@
 
 
 
-        
+    
     var cpac_geojay =
  	fetch(cpac_geojson)
  	.then((response) => {
@@ -168,6 +168,11 @@
  	    return response.json()
  	})
  	.then((data) => {
+	    geojson = L.geoJson(data, {
+		style: style,
+		onEachFeature: onEachFeature
+	    }).addTo(mymap);
+	    
  	    L.geoJson(data,
 		      {
 			  style: function(feature) {
@@ -193,12 +198,67 @@
 	});
     
 
-   
-        L.esri.basemapLayer('Gray').addTo(mymap);
     
-          L.control.scale().addTo(mymap); 
+    L.esri.basemapLayer('Gray').addTo(mymap);
+    
+    L.control.scale().addTo(mymap); 
 
-legend.addTo(mymap);
+    legend.addTo(mymap);
 
-     </script>
+    function onLocationFound(e) {
+	var radius = e.accuracy;
+
+	L.marker(e.latlng).addTo(map)
+            .bindPopup("You are within " + radius + " meters from this point").openPopup();
+
+	L.circle(e.latlng, radius).addTo(map);
+    }
+
+    mymap.on('locationfound', onLocationFound);
+
+    
+    function onLocationError(e) {
+	alert(e.message);
+    }
+
+    mymap.on('locationerror', onLocationError);
+
+    function highlightFeature(e) {
+	var layer = e.target;
+
+	layer.setStyle({
+            weight: 5,
+            color: '#666',
+            dashArray: '',
+            fillOpacity: 0.7
+	});
+
+	if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+            layer.bringToFront();
+	}
+    }
+
+    function resetHighlight(e) {
+	geojson.resetStyle(e.target);
+    }
+
+    function onEachFeature(feature, layer) {
+	layer.on({
+            mouseover: highlightFeature,
+            mouseout: resetHighlight,
+            click: () => {}
+	});
+    }
+    function style(feature) {
+	return {
+            fillColor: 'purple',
+            weight: 2,
+            opacity: 1,
+            color: 'white',
+            dashArray: '3',
+            fillOpacity: 0.7
+	};
+    }
+
+    </script>
 </html>

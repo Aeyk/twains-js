@@ -50,19 +50,19 @@
     //var mymap = L.map('mapid').setView([0, 0], 1);
     var mymap = L.map('mapid').setView([37.75, -122.23], 6);
     
-    var union_pacific_geojson = new Request('http://localhost:8000/up');
+    var union_pacific_geojson = new Request('UnionPacific.geojson');
     
-    var bnsf_geojson = new Request('http://localhost:8000/bnsf')
+    var bnsf_geojson = new Request('BNSF.geojson')
 
-    var csx_geojson = new Request('http://localhost:8000/csx')
+    var csx_geojson = new Request('CSX.geojson')
     
-    var cpac_geojson = new Request('http://localhost:8000/cp')
+    var cpac_geojson = new Request('CanadianPacific.geojson')
     
-    var cnat_geojson = new Request('http://localhost:8000/cn')
+    var cnat_geojson = new Request('CanadianNational.geojson')
     
-    var kcs_geojson = new Request('http://localhost:8000/kcs')
+    var kcs_geojson = new Request('KansasCitySouthern.geojson')
     
-    var other_geojson = new Request('http://localhost:8000/other')
+    var other_geojson = new Request('ShortLines.geojson')
 
     var legend = L.control({ position: "bottomleft" });
 

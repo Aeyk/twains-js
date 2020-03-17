@@ -36,10 +36,11 @@
     <script src="https://unpkg.com/esri-leaflet-heatmap@2.0.0"></script>
 
 
+    <!-- Esri Leaflet Geocoder -->
+    <link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder/dist/esri-leaflet-geocoder.css">
+    <script src="https://unpkg.com/esri-leaflet-geocoder"></script>
 
-
-    <script src="./Leaflet.Control.Custom.js"></script>
-
+    
 
     <style>
       #mapid {
@@ -274,79 +275,79 @@
             fillOpacity: 0.7
 	};
     }
-    L.control.custom({
-	position: 'topright',
-	content : '<button type="button" class="btn btn-default">'+
-            '    <i class="fa fa-crosshairs"></i>'+
-            '</button>'+
+    // L.control.custom({
+    // 	position: 'topright',
+    // 	content : '<button type="button" class="btn btn-default">'+
+    //         '    <i class="fa fa-crosshairs"></i>'+
+    //         '</button>'+
 
-	'<input type="text" class="form-control" placeholder="Source" aria-label="Username" aria-describedby="basic-addon1">' +
-	    '<input type="text" class="form-control" placeholder="Destination" aria-label="Username" aria-describedby="basic-addon1">',
+    // 	'<input type="text" class="form-control" placeholder="Source" aria-label="Username" aria-describedby="basic-addon1">' +
+    // 	    '<input type="text" class="form-control" placeholder="Destination" aria-label="Username" aria-describedby="basic-addon1">',
 
-	// '<button type="button" class="btn btn-info">'+
-        //     '    <i class="fa fa-compass"></i>'+
-        //     '</button>'+
+    // 	// '<button type="button" class="btn btn-info">'+
+    //     //     '    <i class="fa fa-compass"></i>'+
+    //     //     '</button>'+
 	
-        //     '<button type="button" class="btn btn-primary">'+
-        //     '    <i class="fa fa-spinner fa-pulse fa-fw"></i>'+
-        //     '</button>'+
+    //     //     '<button type="button" class="btn btn-primary">'+
+    //     //     '    <i class="fa fa-spinner fa-pulse fa-fw"></i>'+
+    //     //     '</button>'+
 	
-        //     '<button type="button" class="btn btn-danger">'+ m
-        //     '    <i class="fa fa-times"></i>'+
-        //     '</button>'+
+    //     //     '<button type="button" class="btn btn-danger">'+ m
+    //     //     '    <i class="fa fa-times"></i>'+
+    //     //     '</button>'+
 	
-        //     '<button type="button" class="btn btn-success">'+
-        //     '    <i class="fa fa-check"></i>'+
-        //     '</button>'+
+    //     //     '<button type="button" class="btn btn-success">'+
+    //     //     '    <i class="fa fa-check"></i>'+
+    //     //     '</button>'+
 	
-        //     '<button type="button" class="btn btn-warning">'+
-        //     '    <i class="fa fa-exclamation-triangle"></i>'+
-        //     '</button>',
-	classes : 'btn-group-vertical btn-group-sm col-6 col-md-12',
-	style   :
-	{
-            margin: '10px',
-            padding: '0px 0 0 0',
-            cursor: 'pointer',
-	},
-	datas   :
-	{
-            'foo': 'bar',
-	},
-	events:
-	{
+    //     //     '<button type="button" class="btn btn-warning">'+
+    //     //     '    <i class="fa fa-exclamation-triangle"></i>'+
+    //     //     '</button>',
+    // 	classes : 'btn-group-vertical btn-group-sm col-6 col-md-12',
+    // 	style   :
+    // 	{
+    //         margin: '10px',
+    //         padding: '0px 0 0 0',
+    //         cursor: 'pointer',
+    // 	},
+    // 	datas   :
+    // 	{
+    //         'foo': 'bar',
+    // 	},
+    // 	events:
+    // 	{
 	    
-	    keypress: function (data) {
-		// If user presses enter, log the input text to console.
-		if(data.keyCode == 13) {
-		    console.log(data.target.value)
-		}
+    // 	    keypress: function (data) {
+    // 		// If user presses enter, log the input text to console.
+    // 		if(data.keyCode == 13) {
+    // 		    console.log(data.target.value)
+    // 		}
 		
-	    },
+    // 	    },
 
 	    
-	    touch: function(data)
-            {
-		// 		console.log(data); 
-            },
-            click: function(data)
-            {
-		// console.log(data.target.child);
-            },
-            dblclick: function(data)
-            {
-		// console.log('wrapper div element dblclicked');
-		// console.log(data);
-            },
-            contextmenu: function(data)
-            {
-		// console.log('wrapper div element contextmenu');
-		// console.log(data);
-            },
-	}
-    })
+    // 	    touch: function(data)
+    //         {
+    // 		// 		console.log(data); 
+    //         },
+    //         click: function(data)
+    //         {
+    // 		// console.log(data.target.child);
+    //         },
+    //         dblclick: function(data)
+    //         {
+    // 		// console.log('wrapper div element dblclicked');
+    // 		// console.log(data);
+    //         },
+    //         contextmenu: function(data)
+    //         {
+    // 		// console.log('wrapper div element contextmenu');
+    // 		// console.log(data);
+    //         },
+    // 	}
+    // })
 
-    .addTo(mymap);
+    // .addTo(mymap);
 
 
     // The following code uses OpenSourceMapsRouter to get walking / driving directions
@@ -357,7 +358,6 @@
     // 	    return response.json()
     // 	})
     // 	.then((data) => {
-
     // 	    L.Routing.control({
     // 		waypoints: [
     // 		    L.GeoJSON.coordsToLatLng(data.features[0].geometry.coordinates[0][0]),
@@ -366,8 +366,14 @@
     // 		routeWhileDragging: true}).addTo(mymap);
     // 	});
 
-    
-    
+    var searchControl = L.esri.Geocoding.geosearch().addTo(mymap);
+    var results = L.layerGroup().addTo(mymap);
 
+    searchControl.on("results", function(data) {
+        results.clearLayers();
+        for (var i = data.results.length - 1; i >= 0; i--) {
+            results.addLayer(L.marker(data.results[i].latlng));
+        }
+    });
 	</script>
 </html>

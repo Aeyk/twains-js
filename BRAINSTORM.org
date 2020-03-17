@@ -1,0 +1,11 @@
+https://c02.my.uprr.com/fpa/intermodal-schedules/#/
+https://shipcsx.com/pub_sx_ischedulepublic_jct/sx.ischedulepublic/ScheduleLanding.evt
+
+These links point to live intermodal trains.
+
+http://www.nscorp.com/NSCorpServlets/ApplicationMimeContentMappingServlet
+keep an eye on this link
+
+
+Use case: Source, Destination, it tries to find a route for you.
+

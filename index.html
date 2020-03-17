@@ -17,6 +17,11 @@
 
     <script src="./fa.js"></script>
 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+    
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
     <!-- Load Esri Leaflet from CDN -->
@@ -29,6 +34,8 @@
 
     <!-- Load Heatmap Feature Layer from CDN -->
     <script src="https://unpkg.com/esri-leaflet-heatmap@2.0.0"></script>
+
+
 
 
     <script src="./Leaflet.Control.Custom.js"></script>
@@ -273,9 +280,7 @@
             '    <i class="fa fa-crosshairs"></i>'+
             '</button>'+
 
-	    '<div class="input-group-prepend">' +
-	    '</div>' +
-	    '<input type="text" class="form-control" placeholder="Source" aria-label="Username" aria-describedby="basic-addon1">' +
+	'<input type="text" class="form-control" placeholder="Source" aria-label="Username" aria-describedby="basic-addon1">' +
 	    '<input type="text" class="form-control" placeholder="Destination" aria-label="Username" aria-describedby="basic-addon1">' +
 
 	'<button type="button" class="btn btn-default">'+
@@ -286,19 +291,19 @@
 	// '<button type="button" class="btn btn-info">'+
         //     '    <i class="fa fa-compass"></i>'+
         //     '</button>'+
-	    
+	
         //     '<button type="button" class="btn btn-primary">'+
         //     '    <i class="fa fa-spinner fa-pulse fa-fw"></i>'+
         //     '</button>'+
-	    
+	
         //     '<button type="button" class="btn btn-danger">'+
         //     '    <i class="fa fa-times"></i>'+
         //     '</button>'+
-	    
+	
         //     '<button type="button" class="btn btn-success">'+
         //     '    <i class="fa fa-check"></i>'+
         //     '</button>'+
-	    
+	
         //     '<button type="button" class="btn btn-warning">'+
         //     '    <i class="fa fa-exclamation-triangle"></i>'+
         //     '</button>',
@@ -315,26 +320,59 @@
 	},
 	events:
 	{
+	    
+	    keypress: function (data) {
+		// If user presses enter, log the input text to console.
+		if(data.keyCode == 13) {
+		    console.log(data.target.value)
+		}
+		
+	    },
+
+	    
 	    touch: function(data)
             {
-		console.log(data);
+		// 		console.log(data); 
             },
             click: function(data)
             {
-		console.log(data.target.child);
+		// console.log(data.target.child);
             },
             dblclick: function(data)
             {
-		console.log('wrapper div element dblclicked');
-		console.log(data);
+		// console.log('wrapper div element dblclicked');
+		// console.log(data);
             },
             contextmenu: function(data)
             {
-		console.log('wrapper div element contextmenu');
-		console.log(data);
+		// console.log('wrapper div element contextmenu');
+		// console.log(data);
             },
 	}
     })
+
     .addTo(mymap);
-    </script>
+
+
+    // The following code uses OpenSourceMapsRouter to get walking / driving directions
+    // It will display a little control menu underneath search.
+    // var temp =
+    // 	fetch(bnsf_geojson)
+    // 	.then((response) => {
+    // 	    return response.json()
+    // 	})
+    // 	.then((data) => {
+
+    // 	    L.Routing.control({
+    // 		waypoints: [
+    // 		    L.GeoJSON.coordsToLatLng(data.features[0].geometry.coordinates[0][0]),
+    // 		    L.GeoJSON.coordsToLatLng(data.features[0].geometry.coordinates[0][4])
+    // 		],
+    // 		routeWhileDragging: true}).addTo(mymap);
+    // 	});
+
+    
+    
+
+	</script>
 </html>

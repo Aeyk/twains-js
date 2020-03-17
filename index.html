@@ -15,7 +15,10 @@
 	    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="/
 	    crossorigin=""></script>
 
-    
+    <script src="./fa.js"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
     <!-- Load Esri Leaflet from CDN -->
     <script src="https://unpkg.com/esri-leaflet@2.3.3/dist/esri-leaflet.js"
 	    integrity="sha512-cMQ5e58BDuu1pr9BQ/eGRn6HaR6Olh0ofcHFWe5XesdCITVuSBiBZZbhCijBe5ya238f/zMMRYIMIIg1jxv4sQ=="
@@ -269,22 +272,37 @@
 	content : '<button type="button" class="btn btn-default">'+
             '    <i class="fa fa-crosshairs"></i>'+
             '</button>'+
-            '<button type="button" class="btn btn-info">'+
-            '    <i class="fa fa-compass"></i>'+
-            '</button>'+
-            '<button type="button" class="btn btn-primary">'+
-            '    <i class="fa fa-spinner fa-pulse fa-fw"></i>'+
-            '</button>'+
-            '<button type="button" class="btn btn-danger">'+
-            '    <i class="fa fa-times"></i>'+
-            '</button>'+
-            '<button type="button" class="btn btn-success">'+
-            '    <i class="fa fa-check"></i>'+
-            '</button>'+
-            '<button type="button" class="btn btn-warning">'+
-            '    <i class="fa fa-exclamation-triangle"></i>'+
+
+	    '<div class="input-group-prepend">' +
+	    '</div>' +
+	    '<input type="text" class="form-control" placeholder="Source" aria-label="Username" aria-describedby="basic-addon1">' +
+	    '<input type="text" class="form-control" placeholder="Destination" aria-label="Username" aria-describedby="basic-addon1">' +
+
+	'<button type="button" class="btn btn-default">'+
+            '    <i class="fa fa-arrow-alt-circle-right"></i>'+
             '</button>',
-	classes : 'btn-group-vertical btn-group-sm',
+
+
+	// '<button type="button" class="btn btn-info">'+
+        //     '    <i class="fa fa-compass"></i>'+
+        //     '</button>'+
+	    
+        //     '<button type="button" class="btn btn-primary">'+
+        //     '    <i class="fa fa-spinner fa-pulse fa-fw"></i>'+
+        //     '</button>'+
+	    
+        //     '<button type="button" class="btn btn-danger">'+
+        //     '    <i class="fa fa-times"></i>'+
+        //     '</button>'+
+	    
+        //     '<button type="button" class="btn btn-success">'+
+        //     '    <i class="fa fa-check"></i>'+
+        //     '</button>'+
+	    
+        //     '<button type="button" class="btn btn-warning">'+
+        //     '    <i class="fa fa-exclamation-triangle"></i>'+
+        //     '</button>',
+	classes : 'btn-group-vertical btn-group-sm col-6 col-md-12',
 	style   :
 	{
             margin: '10px',
@@ -297,10 +315,13 @@
 	},
 	events:
 	{
+	    touch: function(data)
+            {
+		console.log(data);
+            },
             click: function(data)
             {
-		console.log('wrapper div element clicked');
-		console.log(data);
+		console.log(data.target.child);
             },
             dblclick: function(data)
             {

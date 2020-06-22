@@ -40,6 +40,8 @@
     <link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder/dist/esri-leaflet-geocoder.css">
     <script src="https://unpkg.com/esri-leaflet-geocoder"></script>
 
+
+    <script src="https://www.unpkg.com/browse/turf@3.0.14/turf.min.js"></script>
     
 
     <style>
@@ -56,234 +58,107 @@
   </body>
 
   <script>
-    /* https://www.arcgis.com/home/item.html?id=96ec03e4fc8546bd8a864e39a2c3fc41 */
+   /* https://www.arcgis.com/home/item.html?id=96ec03e4fc8546bd8a864e39a2c3fc41 */
 
+   //   var geojson;
 
-    var position = {lat: 37.762468,  lon: -122.419019};
-    
-    //var mymap = L.map('mapid').setView([0, 0], 1);
-    var mymap = L.map('mapid', {
-	preferCanvas: true
-    }).setView([37.75, -122.23], 6);
-    
-    var union_pacific_geojson = new Request('UnionPacific.json');
-    
-    var bnsf_geojson = new Request('BNSF.geojson')
+   var position = {lat: 37.762468,  lon: -122.419019};
+   
+   //var mymap = L.map('mapid').setView([0, 0], 1);
 
-    var csx_geojson = new Request('CSX.geojson')
-    
-    var cpac_geojson = new Request('CanadianPacific.geojson')
-    
-    var cnat_geojson = new Request('CanadianNational.geojson')
-    
-    var kcs_geojson = new Request('KansasCitySouthern.geojson')
-    
-    var other_geojson = new Request('ShortLines.geojson')
+   var mymap = L.map('mapid', {
+       preferCanvas: true
+   }).setView([37.75, -122.23], 6);
+   
+   var up_geojson = new Request('UnionPacific.geojson');
+   var bnsf_geojson = new Request('BNSF.geojson')
+   var csx_geojson = new Request('CSX.geojson')
+   var cpac_geojson = new Request('CanadianPacific.geojson')
+   var cnat_geojson = new Request('CanadianNational.geojson')
+   var kcs_geojson = new Request('KansasCitySouthern.geojson')
+   var other_geojson = new Request('ShortLines.geojson')
 
-    var legend = L.control({ position: "bottomleft" });
+   var legend = L.control({ position: "bottomleft" });
+   
+   legend.onAdd = function(map) {
+       var div = L.DomUtil.create("div", "legend");
+       div.innerHTML += "<h4>Legend<g/h4>";
+       div.innerHTML += '<i style="background-color: #bf8a33">__</i><span>Union Pacific</span><br>';
+       div.innerHTML += '<i style="background: #448D40">__</i><span>BNSF</span><br>';
+       div.innerHTML += '<i style="background: #E6E696">__</i><span>CSX</span><br>';
+       div.innerHTML += '<i style="background: #E8E6E0">__</i><span>Norfolk Southern</span><br>';
+       div.innerHTML += '<i style="background: #ed1d24">__</i><span>Canadian Pacific (US data only)</span><br>';
+       div.innerHTML += '<i style="background: blue">__</i><span>Canadian National (US data only)</span><br>';
+       div.innerHTML += '<i style="background: violet">__</i><span>Kansas Southern</span><br>';
+       div.innerHTML += '<i style="background: purple">__</i><span>Other / Short Lines</span><br>';
+       return div;
+   };
 
-    legend.onAdd = function(map) {
-	var div = L.DomUtil.create("div", "legend");
-	div.innerHTML += "<h4>Legend<g/h4>";
-	div.innerHTML += '<i style="background-color: #bf8a33">__</i><span>Union Pacific</span><br>';
-	div.innerHTML += '<i style="background: #448D40">__</i><span>BNSF</span><br>';
-	div.innerHTML += '<i style="background: #E6E696">__</i><span>CSX</span><br>';
-	div.innerHTML += '<i style="background: #E8E6E0">__</i><span>Norfolk Southern</span><br>';
-	div.innerHTML += '<i style="background: #ed1d24">__</i><span>Canadian Pacific (US data only)</span><br>';
-	div.innerHTML += '<i style="background: blue">__</i><span>Canadian National (US data only)</span><br>';
-	div.innerHTML += '<i style="background: violet">__</i><span>Kansas Southern</span><br>';
-	div.innerHTML += '<i style="background: purple">__</i><span>Other / Short Lines</span><br>';
-	return div;
-    };
+   let colors = ["#bf8a33", "#448D40", "#E6E696", "#E8E6E0", "#ed1d24", "blue", "violet", "purple"]
+   
+   
+   function request_and_render_geojson(url, color= "black") {
+       let data;
+       let geojson;
+       fetch(url)
+	   .then((response) => {
+ 	       return data = response.json()
+	   })
+	   .then((data) => {
+	       geojson = L.geoJson(data, {
+		   onEachFeature: (feature, layer) => {
+		       layer.on({
+     			   mouseover: highlightFeature,
+     			   mouseout: resetHighlight,
+     			   click: () => { console.log(this) }
+		       });
+		   },
+		   style: () => {
+ 		       return  { color: color }
+		   }
+	       })
+	       geojson.addTo(mymap);	      
+	   })
+   }
 
+   request_and_render_geojson(up_geojson, colors[0]);
+   request_and_render_geojson(bnsf_geojson, colors[1]);
+   request_and_render_geojson(csx_geojson, colors[2]);
+   // TODO: get norfolk geojson
+   // request_and_render_geojson(norfolk_geojson, colors[3]);
 
-    
-    var csx_geojay =
- 	fetch(csx_geojson)
- 	.then((response) => {
- 	    return response.json()
- 	})
- 	.then((data) => {
- 	    L.geoJson(data,
-		      {
-			  style: function(feature) {
-			      return { color: '#E6E696' }
-			  }
-		      }).addTo(mymap);
-	    
-	});
+   request_and_render_geojson(cpac_geojson, colors[4]);
+   request_and_render_geojson(cnat_geojson, colors[5]);
+   request_and_render_geojson(kcs_geojson, colors[6]);
+   request_and_render_geojson(other_geojson, colors[7]);   
 
-    
-    var up_geojson =
- 	fetch(union_pacific_geojson)
- 	.then((response) => {
- 	    return response.json()
- 	})
- 	.then((data) => {
- 	    L.geoJson(data,
-		      {
-			  style: function(feature) {
-			      return { color: '#bf8a33' }
-			  }
-		      })
- 		.addTo(mymap);
- 	});
-    
-    var bnsf_geojay =
- 	fetch(bnsf_geojson)
- 	.then((response) => {
- 	    return response.json()
- 	})
- 	.then((data) => {
- 	    L.geoJson(data,
-		      {
-			  style: function(feature) {
-			      return { color: '#448D40' }
-			  }
-		      }).addTo(mymap);
-	    
-	});
+   
+   L.esri.basemapLayer('Gray').addTo(mymap);
+   
+   // L.control.scale().addTo(mymap); 
 
+   legend.addTo(mymap);
 
+   
+   function highlightFeature(e) {
+       var layer = e.target;
+       layer.setStyle({
+           color: '#666',
+       });
+       if(!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+           layer.bringToFront();
+       }
+   }
 
-    
-    var cpac_geojay =
- 	fetch(cpac_geojson)
- 	.then((response) => {
- 	    return response.json()
- 	})
- 	.then((data) => {
- 	    L.geoJson(data,
-		      {
-			  style: function(feature) {
-			      return { color: '#ed1d24' }
-			  }
-		      }).addTo(mymap);
-	    
-	});
-    
-    var cnat_geojay =
- 	fetch(cnat_geojson)
- 	.then((response) => {
- 	    return response.json()
- 	})
- 	.then((data) => {
- 	    L.geoJson(data,
-		      {
-			  style: function(feature) {
-			      return { color: 'red'}
-			  }
-		      }).addTo(mymap);
-	    
-	});
-    
-    
-    var kcs_geojay =
- 	fetch(kcs_geojson)
- 	.then((response) => {
- 	    return response.json()
- 	})
- 	.then((data) => {
-	    geojson = L.geoJson(data, {
-		style: style,
-		onEachFeature: onEachFeature
-	    }).addTo(mymap);
-	    
- 	    L.geoJson(data,
-		      {
-			  style: function(feature) {
-			      return { color: 'violet' }
-			  }
-		      }).addTo(mymap);
-	    
-	});
-    
-    var other_geojay =
- 	fetch(other_geojson)
- 	.then((response) => {
- 	    return response.json()
- 	})
- 	.then((data) => {
- 	    L.geoJson(data,
-		      {
-			  style: function(feature) {
-			      return { color: 'purple' }
-			  }
-		      }).addTo(mymap);
-	    
-	});
-    
+   function resetHighlight(e) {
+       var layer = e.target;
+       layer.setStyle({
+           color: e.target.defaultOptions.style().color,
+       });
+       if(!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+	   //           e.feature.bringToFront();
+       }
+   }
 
-    
-    L.esri.basemapLayer('Gray').addTo(mymap);
-    
-    L.control.scale().addTo(mymap); 
-
-    legend.addTo(mymap);
-
-    function onLocationFound(e) {
-	var radius = e.accuracy;
-
-	L.marker(e.latlng).addTo(map)
-            .bindPopup("You are within " + radius + " meters from this point").openPopup();
-
-	L.circle(e.latlng, radius).addTo(map);
-    }
-
-    mymap.on('locationfound', onLocationFound);
-
-    
-    function onLocationError(e) {
-	alert(e.message);
-    }
-
-    mymap.on('locationerror', onLocationError);
-
-    function highlightFeature(e) {
-	var layer = e.target;
-
-	layer.setStyle({
-            weight: 5,
-            color: '#666',
-            dashArray: '',
-            fillOpacity: 0.7
-	});
-
-	if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-            layer.bringToFront();
-	}
-    }
-
-    function resetHighlight(e) {
-	geojson.resetStyle(e.target);
-    }
-
-    function onEachFeature(feature, layer) {
-	layer.on({
-            mouseover: highlightFeature,
-            mouseout: resetHighlight,
-            click: () => {}
-	});
-    }
-    function style(feature) {
-	return {
-            fillColor: 'purple',
-            weight: 2,
-            opacity: 1,
-            color: 'white',
-            dashArray: '3',
-            fillOpacity: 0.7
-	};
-    }
-
-    var searchControl = L.esri.Geocoding.geosearch().addTo(mymap);
-    var results = L.layerGroup().addTo(mymap);
-
-    searchControl.on("results", function(data) {
-        results.clearLayers();
-        for (var i = data.results.length - 1; i >= 0; i--) {
-            results.addLayer(L.marker(data.results[i].latlng));
-        }
-    });
-	</script>
+  </script>
 </html>
